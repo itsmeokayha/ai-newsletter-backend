@@ -1,13 +1,14 @@
+const cors = require('cors');
+app.use(cors());
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
-const cors = require('cors');
+
 const app = express();
 const port = process.env.PORT || 3001; // Choose an available port
-const articlesRoutes = require('./routes/articles');
 
-app.use(cors());
+
 app.use(bodyParser.json());
 
 // Serve static files from the React app build directory
@@ -42,13 +43,4 @@ app.listen(port, () => {
     console.log('Server running on http://localhost:${port}');
 });
 
-app.post('/articles', (req, res) => {
-    const newArticle = req.body;
-    // Implement logic to store newArticle in your database or data structure
-    console.log('Received new article:', newArticle);
-    res.status(200).json({ message: 'New article added' });
-});
 
-
-
-app.use('/articles', articlesRoutes);
