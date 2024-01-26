@@ -1,18 +1,27 @@
-const cors = require('cors');
-app.use(cors());
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
+const cors = require('cors');
 
 const app = express();
-const port = process.env.PORT || 3001; // Choose an available port
+const port = process.env.PORT || 3001;
 
+// Define CORS options
+const corsOptions = {
+  origin: 'https://teal-sawine-c1f959.netlify.app/', // replace with your actual Netlify URL
+  optionsSuccessStatus: 200
+};
+
+// Use CORS with the specified options
+app.use(cors(corsOptions));
+
+// Then continue with the rest of your middleware and routes
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'build')));
 
 app.use(bodyParser.json());
 
-// Serve static files from the React app build directory
-app.use(express.static(path.join(__dirname, 'build')));
 
 // Endpoint to serve articles.json
 app.get('/articles', (req, res) => {
@@ -36,11 +45,10 @@ app.post('/submit-feedback', (req, res) => {
 
 // The "catchall" handler to serve the React app
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname + '/build/index.html'));
+    res.sendFile(path.join(__dirname, '/build/index.html'));
 });
-
 app.listen(port, () => {
-    console.log('Server running on http://localhost:${port}');
+    console.log(`Server running on http://localhost:${port}`);
 });
 
 
